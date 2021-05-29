@@ -12,8 +12,17 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from google.oauth2 import service_account
+from google import cloud
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials/belajarkuy-314312-a3447303ada6.json'
+
+credentials = service_account.Credentials.from_service_account_file(
+    "credential.json")
+print(credentials)
+# client = language.LanguageServiceClient(credentials=credentials)
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credential.json'
+# os.environ['GOOGLE_CLOUD_PROJECT'] = 'credential.json'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,17 +43,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_spanner',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'rest_framework', 
-    'django_spanner',
-
-    'api'
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +95,16 @@ DATABASES = {
         'NAME': 'belajarkuy',
     }
 }
+
+if True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django_spanner',
+            'PROJECT': 'belajarkuy-314312',
+            'INSTANCE': 'belajarkuy-db',
+            'NAME': 'belajarkuy'
+        },
+    }
 
 
 # Password validation
