@@ -1,5 +1,5 @@
 from django.views.generic import View
-from .models import AssignmentHistory, Question
+from .models import AssignmentHistory, Question, Modules
 from django.http import HttpResponse, JsonResponse
 from .constant import Constant
 from django.conf import settings
@@ -12,6 +12,56 @@ class QuestionView(View):
         entries = Question.objects.all()
         print(entries)
         return HttpResponse('result')
+
+class ModuleView(View):
+    def get(self, request):
+        modules = Modules.objects.all()
+        
+        modules_ret = []
+        for module in modules:
+            modules_ret.append({
+                'id': module.id,
+                'subject': module.subject,
+                'total_questions': module.total,
+                'duration': 6000,
+            })
+
+        return JsonResponse({
+            'status': True,
+            'message': '200',
+            'modules': modules_ret
+        })
+
+class ModuleDetailView(View):
+    def get(self, request, *args, **kwargs):
+        module_id = kwargs['id']
+
+        questions = Question.objects.filter(modules__id=module_id)
+
+        questions_ret = []
+        for question in questions:
+            options = []
+            if question.option_1 is not None:
+                options.append(question.option_1)
+            if question.option_2 is not None:
+                options.append(question.option_2)
+            if question.option_3 is not None:
+                options.append(question.option_3)
+            if question.option_4 is not None:
+                options.append(question.option_4)
+
+            questions_ret.append({
+                'id': question.id,
+                'questions': question.questionOnly,
+                'options': options,
+                'correct_answer': question.answer
+            })
+
+        return JsonResponse({
+            'status': True,
+            'message': '200',
+            'questions': questions_ret
+        })
 
 class RecommendationDetailView(View):
     def get(self, request, *args, **kwargs):

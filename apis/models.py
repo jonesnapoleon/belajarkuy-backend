@@ -5,6 +5,7 @@ from django.db import models
 class Modules(models.Model):
     subject = models.CharField(max_length=512)
     classes = models.CharField(max_length=512)
+    total = models.IntegerField()
     modules = models.IntegerField()
 
 class Question(models.Model):
