@@ -32,8 +32,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# MODEL = init_recommender()
-MODEL = None
+MODEL = init_recommender()
+# MODEL = None
 
 # Application definition
 
