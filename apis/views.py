@@ -2,6 +2,10 @@ from django.views.generic import View
 from .models import AssignmentHistory, Question
 from django.http import HttpResponse, JsonResponse
 from .constant import Constant
+from django.conf import settings
+
+from tqdm import tqdm
+import pandas as pd
 
 class QuestionView(View):
     def get(self, request):
@@ -13,16 +17,39 @@ class RecommendationDetailView(View):
     def get(self, request, *args, **kwargs):
         user_id = kwargs['id']
         subject = kwargs['subject']
+        
+        histories = AssignmentHistory.objects.filter(question__modules__subject=subject, user__id=user_id, status=False)
+        false_id = [history.question.id for history in histories][:5]
+        
+        recommendations = []
+        for id in tqdm(false_id, total=len(false_id)):
+            recommendation = settings.MODEL.get_recommendations(id)
+            recommendations += recommendation
+        
+        questions = []
+        for recommendation in recommendations:
+            print(recommendation)
+            options = []
+            if not pd.isnull(recommendation['opt1']):
+                options.append(recommendation['opt1'])
+            if not pd.isnull(recommendation['opt2']):
+                options.append(recommendation['opt2'])
+            if not pd.isnull(recommendation['opt3']):
+                options.append(recommendation['opt3'])
+            if not pd.isnull(recommendation['opt4']):
+                options.append(recommendation['opt4'])
 
-        counter_dict = {}
-        correct_dict = {}
-        for el in Constant.subject_chapters[subject]:
-            counter_dict[el] = 0
-            correct_dict[el] = 0
-        history = AssignmentHistory.objects.filter(question__modules__subject=subject, user__id=user_id)
-        print(history)
+            questions.append({
+                'id': recommendation['q_id'],
+                'questions': recommendation['questions'],
+                'options': options,
+                'correct_answer': recommendation['ans']
+            })
+        
         return JsonResponse({
-            'a': "Hello"
+            'status': True,
+            'message': '200',
+            'questions': questions
         })
 
 class CompetencyView(View):
