@@ -4,8 +4,9 @@ from django.http import HttpResponse
 
 
 class QuestionView(View):
-
     def get(self, request):
         entries = Question.objects.all()
         print(entries)
         return HttpResponse('result')
+
+# class ModulesView(view):

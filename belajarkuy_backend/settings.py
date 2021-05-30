@@ -12,14 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from google.oauth2 import service_account
-from google import cloud
-
-
-credentials = service_account.Credentials.from_service_account_file(
-    "credential.json")
-print(credentials)
-# client = language.LanguageServiceClient(credentials=credentials)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credential.json'
 # os.environ['GOOGLE_CLOUD_PROJECT'] = 'credential.json'
@@ -50,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
+    'apis',
 ]
 
 MIDDLEWARE = [
@@ -90,21 +82,19 @@ WSGI_APPLICATION = 'belajarkuy_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'PROJECT': 'belajarkuy-314312',
-        'INSTANCE': 'belajarkuy-db',
-        'NAME': 'belajarkuy',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
-if True:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django_spanner',
-            'PROJECT': 'belajarkuy-314312',
-            'INSTANCE': 'belajarkuy-db',
-            'NAME': 'belajarkuy'
-        },
-    }
+# if True:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django_spanner',
+#             'PROJECT': 'belajarkuy-314312',
+#             'INSTANCE': 'belajarkuy-db',
+#             'NAME': 'belajarkuy'
+#         },
+#     }
 
 
 # Password validation
