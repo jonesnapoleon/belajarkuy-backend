@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from .constant import Constant
 from django.conf import settings
 
+import json
 from tqdm import tqdm
 import pandas as pd
 
@@ -62,6 +63,19 @@ class ModuleDetailView(View):
             'message': '200',
             'questions': questions_ret
         })
+    
+    def post(self, request, *args, **kwargs):
+        raw_body = request.body.decode('utf-8')
+        body = json.loads(raw_body)
+        user_id = kwargs['id']
+
+        for question in body:
+            AssignmentHistory.objects.create(user_id=user_id, question_id=question['questions'], status=question['correct'])
+        
+        return JsonResponse({
+            'status': True,
+            'message': '200'
+        })
 
 class RecommendationDetailView(View):
     def get(self, request, *args, **kwargs):
@@ -78,7 +92,6 @@ class RecommendationDetailView(View):
         
         questions = []
         for recommendation in recommendations:
-            print(recommendation)
             options = []
             if not pd.isnull(recommendation['opt1']):
                 options.append(recommendation['opt1'])
