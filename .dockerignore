@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.tmp_commits_squashed
+static
+venv
+.vscode
+.github
+.git
+.gitignore
