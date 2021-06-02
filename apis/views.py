@@ -2,11 +2,12 @@ from django.views.generic import View
 from .models import *
 from django.http import HttpResponse, JsonResponse
 from .constant import Constant
-from django.conf import settings
 
 import json
 from tqdm import tqdm
 import pandas as pd
+
+import random
 
 class QuestionView(View):
     def get(self, request):
@@ -80,37 +81,43 @@ class RecommendationDetailView(View):
         user_id = kwargs['id']
         subject = kwargs['subject']
         
-        histories = AssignmentHistory.objects.filter(question__modules__subject=subject, user__id=user_id, status=False)
-        false_id = [history.question.id for history in histories][:5]
+        # histories = AssignmentHistory.objects.filter(question__modules__subject=subject, user__id=user_id, status=False)
+        # false_id = [history.question.id for history in histories][:5]
         
-        recommendations = []
-        for id in tqdm(false_id, total=len(false_id)):
-            recommendation = settings.MODEL.get_recommendations(id)
-            recommendations += recommendation
+        # recommendations = []
+        # for id in tqdm(false_id, total=len(false_id)):
+        #     recommendation = settings.MODEL.get_recommendations(id)
+        #     recommendations += recommendation
         
-        questions = []
+        print('Getting from DB')
+        questions = list(Question.objects.filter(modules__subject=subject))
+        print('Sampling')
+        recommendations = random.sample(questions, 100)
+        
+        questions_ret = []
+        print('Getting Recommendation')
         for recommendation in recommendations:
             options = []
-            if not pd.isnull(recommendation['opt1']):
-                options.append(recommendation['opt1'])
-            if not pd.isnull(recommendation['opt2']):
-                options.append(recommendation['opt2'])
-            if not pd.isnull(recommendation['opt3']):
-                options.append(recommendation['opt3'])
-            if not pd.isnull(recommendation['opt4']):
-                options.append(recommendation['opt4'])
+            if not pd.isnull(recommendation.option_1):
+                options.append(recommendation.option_1)
+            if not pd.isnull(recommendation.option_2):
+                options.append(recommendation.option_2)
+            if not pd.isnull(recommendation.option_3):
+                options.append(recommendation.option_3)
+            if not pd.isnull(recommendation.option_4):
+                options.append(recommendation.option_4)
 
-            questions.append({
-                'id': recommendation['q_id'],
-                'questions': recommendation['questions'],
+            questions_ret.append({
+                'id': recommendation.id,
+                'questions': recommendation.questionOnly,
                 'options': options,
-                'correct_answer': recommendation['ans']
+                'correct_answer': recommendation.answer
             })
         
         return JsonResponse({
             'status': True,
             'message': '200',
-            'questions': questions
+            'questions': questions_ret
         })
 
 class CompetencyView(View):
