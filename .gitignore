@@ -132,3 +132,7 @@ dmypy.json
 .vscode
 
 /credentials/*
+
+
+db.sqlite3
+client_secret.json
