@@ -1,0 +1,3 @@
+cloud_sql_proxy -instances belajarkuy-314312:asia-southeast2:belajarkuy=tcp:3306
+mysql -h 127.0.0.1 -u yoga -p
+python manage.py runserver

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import QuestionView, RecommendationDetailView, CompetencyView, ModuleDetailView, ModuleView
+from .views import *
 
 # Create your views here.
 urlpatterns = [

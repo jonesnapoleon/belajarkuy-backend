@@ -1,0 +1,11 @@
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_1.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_2.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_3.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_4.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_5.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_6.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_7.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_8.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_9.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_10.txt
+mysql -h 127.0.0.1 -u yoga -p belajarkuy < sql-command/questions_11.txt

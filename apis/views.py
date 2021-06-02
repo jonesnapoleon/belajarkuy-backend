@@ -1,5 +1,5 @@
 from django.views.generic import View
-from .models import AssignmentHistory, Question, Modules
+from .models import *
 from django.http import HttpResponse, JsonResponse
 from .constant import Constant
 from django.conf import settings
@@ -10,8 +10,6 @@ import pandas as pd
 
 class QuestionView(View):
     def get(self, request):
-        entries = Question.objects.all()
-        print(entries)
         return HttpResponse('result')
 
 class ModuleView(View):
@@ -133,14 +131,14 @@ class CompetencyView(View):
         }
 
         subjects = ['math', 'biology', 'chemistry', 'physics']
-        for subject in subjects:
+        for subject in tqdm(subjects, total=len(subjects)):
             for chapter in Constant.subject_chapters[subject]:
                 counter_dict[subject][chapter] = 0
                 correct_dict[subject][chapter] = 0
         
         histories = AssignmentHistory.objects.filter(user__id=user_id)
         
-        for history in histories:
+        for history in tqdm(histories, total=len(histories)):
             subject = history.question.modules.subject
             chapter = history.question.chapter
             status = history.status
@@ -178,7 +176,7 @@ class CompetencyView(View):
             'math': []
         }
         threshold = 0.7
-        for subject in subjects:
+        for subject in tqdm(subjects, total=len(subjects)):
             for chapter in Constant.subject_chapters[subject]:
                 if counter_dict[subject][chapter] == 0:
                     continue
