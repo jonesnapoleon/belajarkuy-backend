@@ -169,7 +169,7 @@ STATIC_ROOT = 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE = False
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-CSRF_COOKIE_SECURE = False
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# CSRF_COOKIE_SECURE = False
